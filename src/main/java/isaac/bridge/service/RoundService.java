@@ -24,10 +24,9 @@ public class RoundService {
      */
     public Round createRound(Game game) {
 
-        if (game.getId() == null) {
+        if (game.getId() == 0) {
             throw new IllegalGameStateException("Game must be initialized before a round can begin.");
         }
-        long gameId = game.getId();
 
         ArrayList<Round> rounds = game.getRounds();
 
@@ -39,7 +38,7 @@ public class RoundService {
             newRoundDealer = rounds.get(rounds.size() - 1).getNextDealerDirection();
         }
 
-        Round newRound = new Round(gameId, newRoundDealer);
+        Round newRound = new Round(game.getId(), newRoundDealer);
 
         return newRound;
     }

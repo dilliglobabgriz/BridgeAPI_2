@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import isaac.bridge.entity.Game;
+import isaac.bridge.entity.Player;
 import isaac.bridge.entity.Round;
 import isaac.bridge.service.RoundService;
 
@@ -18,7 +19,15 @@ public class CreateRoundTest {
 
     @Test 
     public void createRoundIdTest() {
-        Game game = new Game(9999, 9999, 9999, 9999);
+        Player north = new Player();
+        north.setPlayerId(9999);
+        Player east = new Player();
+        east.setPlayerId(9998);
+        Player south = new Player();
+        south.setPlayerId(9997);
+        Player west = new Player();
+        west.setPlayerId(9996);
+        Game game = new Game(north.getPlayerId(), east.getPlayerId(), south.getPlayerId(), west.getPlayerId());
         game.setId(9999);
 
         Round round = roundService.createRound(game);

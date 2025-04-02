@@ -8,11 +8,14 @@ public class Hand {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "roundId")
-    private Long roundId;  // Foreign key for round
+    @Column(name = "handId")
+    private int handId;  // Unique ID for Hand, no inter using roundId as the primary key
 
-    @Column(name = "playerId")
-    private Long playerId; // Foreign key for player
+    @Column(name = "roundId", nullable = false)  // Foreign key to Round
+    private int roundId;
+
+    @Column(name = "playerId", nullable = false)  // Foreign key to Player
+    private int playerId;
 
     @Column(name = "cards")
     private String cards; // A single string representing the 13 cards
@@ -20,26 +23,34 @@ public class Hand {
     // Constructors
     public Hand() {}
 
-    public Hand(Long roundId, Long playerId, String cards) {
+    public Hand(int roundId, int playerId, String cards) {
         this.roundId = roundId;
         this.playerId = playerId;
         this.cards = cards;
     }
 
     // Getters and Setters
-    public Long getRoundId() {
+    public int getHandId() {
+        return handId;
+    }
+
+    public void setHandId(int handId) {
+        this.handId = handId;
+    }
+
+    public int getRoundId() {
         return roundId;
     }
 
-    public void setRoundId(Long roundId) {
+    public void setRoundId(int roundId) {
         this.roundId = roundId;
     }
 
-    public Long getPlayerId() {
+    public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(Long playerId) {
+    public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
 
@@ -54,10 +65,10 @@ public class Hand {
     @Override
     public String toString() {
         return "Hand{" +
-                "roundId=" + roundId +
+                "handId=" + handId +
+                ", roundId=" + roundId +
                 ", playerId=" + playerId +
                 ", cards='" + cards + '\'' +
                 '}';
     }
 }
-

@@ -31,7 +31,7 @@ public class GameApiController {
      * @return the id of the game
      */
     @PostMapping("/create")  
-    public ResponseEntity<Long> createGame() {
+    public ResponseEntity<Integer> createGame() {
         return ResponseEntity.ok().body(gameService.createGame().getId());
     }
     

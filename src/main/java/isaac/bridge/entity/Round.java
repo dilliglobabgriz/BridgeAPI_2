@@ -11,15 +11,15 @@ public class Round {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roundId")
-    private Long id;
+    private int roundId;
 
     @Column(name = "gameId", nullable = false)
-    private Long gameId;
+    private int gameId;
 
-    @Column(name = "winningBid")
-    private String winningBid; // Store as a compact string
+    @Column(name = "winningBidId", nullable = false)
+    private int winningBidId;
 
-    @Column(name = "dealerDirection")
+    @Column(name = "dealerDirection", nullable = false)
     private int dealerDirection; // 0-3 for N, E, S, W
 
     @Column(name = "northSouthTricksTaken", nullable = false)
@@ -27,6 +27,12 @@ public class Round {
 
     @Column(name = "eastWestTricksTaken", nullable = false)
     private int eastWestTricksTaken = 0;
+
+    @Column(name = "bidHistory")
+    private String bidHistory;
+
+    @Column(name = "trickHistory")
+    private String trickHistory;
 
     /**
      * An array of 52 cards that is shuffled once when the round is initialized
@@ -37,34 +43,45 @@ public class Round {
     private String[] deck;
 
     public Round() {
-        deck = fillDeck();
+        // Initialize deck in try-catch to prevent issues during JPA entity loading
+        try {
+            deck = fillDeck();
+        } catch (Exception e) {
+            // Silent catch to allow JPA entity loading
+            deck = new String[52];
+        }
     }
 
-    public Round(Long gameId, int dealerDirection) {
+    public Round(int gameId, int dealerDirection) {
         this.gameId = gameId;
         this.dealerDirection = dealerDirection;
+        this.winningBidId = 0; // Default value to match NOT NULL constraint
         deck = fillDeck();
     }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    public int getRoundId() {
+        return roundId;
     }
 
-    public Long getGameId() {
+    public void setRoundId(int roundId) {
+        this.roundId = roundId;
+    }
+
+    public int getGameId() {
         return gameId;
     }
 
-    public void setGameId(Long gameId) {
+    public void setGameId(int gameId) {
         this.gameId = gameId;
     }
 
-    public String getWinningBid() {
-        return winningBid;
+    public int getWinningBidId() {
+        return winningBidId;
     }
 
-    public void setWinningBid(String winningBid) {
-        this.winningBid = winningBid;
+    public void setWinningBidId(int winningBidId) {
+        this.winningBidId = winningBidId;
     }
 
     public int getDealerDirection() {
@@ -91,6 +108,22 @@ public class Round {
         this.eastWestTricksTaken = eastWestTricksTaken;
     }
 
+    public String getBidHistory() {
+        return bidHistory;
+    }
+
+    public void setBidHistory(String bidHistory) {
+        this.bidHistory = bidHistory;
+    }
+
+    public String getTrickHistory() {
+        return trickHistory;
+    }
+
+    public void setTrickHistory(String trickHistory) {
+        this.trickHistory = trickHistory;
+    }
+
     public String[] getDeck() {
         return deck;
     }
@@ -104,7 +137,7 @@ public class Round {
 
         for (int rankIndex=0; rankIndex<13; rankIndex++) {
             for (int suitIndex=0; suitIndex<4; suitIndex++) {
-                deck[rankIndex*ranks.length + suitIndex] = ranks[rankIndex] + suits[suitIndex];
+                deck[rankIndex*4 + suitIndex] = ranks[rankIndex] + suits[suitIndex];
             }
         }
 
@@ -119,7 +152,6 @@ public class Round {
      * @param deck
      */
     public void shuffleDeck(String[] deck) {
-
         Random rand = new Random();
 
         for (int i=deck.length-1; i>0; i--) {
@@ -143,19 +175,12 @@ public class Round {
     @Override
     public String toString() {
         return "Round{" +
-                "id=" + id +
-                ", gameId=" + gameId +
-                ", winningBid='" + winningBid + '\'' +
+                "roundId=" + roundId +
+                ", gameId=" + gameId + 
+                ", winningBidId='" + winningBidId + '\'' +
                 ", dealerDirection=" + dealerDirection +
                 ", northSouthTricksTaken=" + northSouthTricksTaken +
                 ", eastWestTricksTaken=" + eastWestTricksTaken +
                 '}';
-    }
-
-    public static void main(String[] args) {
-        Round round = new Round();
-        for (String card : round.getDeck()) {
-            System.out.println(card);
-        }
     }
 }

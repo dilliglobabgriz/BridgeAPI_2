@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import isaac.bridge.entity.Game;
 
 @Repository
-public interface GameRepository extends JpaRepository<Game, Long>{
+public interface GameRepository extends JpaRepository<Game, Integer>{
     
 }

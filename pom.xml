@@ -38,25 +38,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-		<dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		    <version>8.0.29</version> <!-- Replace with the latest version if needed -->
-		</dependency>
-
-		<dependency>
-		    <groupId>jakarta.persistence</groupId>
-		    <artifactId>jakarta.persistence-api</artifactId>
-		    <version>3.1.0</version> <!-- Use the latest compatible version -->
-		</dependency>
 		
 		
 		<dependency>
-		    <groupId>org.hibernate</groupId>
+		    <groupId>org.hibernate.orm</groupId>
 		    <artifactId>hibernate-core</artifactId>
-		    <version>6.0.0.Final</version> <!-- Latest compatible version with Jakarta Persistence -->
+		    <version>6.0.0.Final</version>
 		</dependency>
+
+		<dependency>
+        	<groupId>com.h2database</groupId>
+       		<artifactId>h2</artifactId>
+      	    <scope>runtime</scope>
+  	  	</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import isaac.bridge.entity.Round;
 
 @Repository
-public interface RoundRepository extends JpaRepository<Round, Long>{
+public interface RoundRepository extends JpaRepository<Round, Integer>{
     
 }

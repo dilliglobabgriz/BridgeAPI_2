@@ -9,19 +9,19 @@ public class Bid {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "bidId")
-    private Long bidId;
+    private int bidId;
 
     @Column(name = "direction")
     private int direction; // 0 for North, 1 for East, 2 for South, 3 for West
 
     @Column(name = "suit")
-    private int suit; // 0 for Clubs, 1 for Diamonds, 2 for Hearts, 3 for Spades, 4 for No Trump
+    private int suit; // 0 for Clubs, 1 for Diamonds, 2 for Hearts, 3 for Spades, 4 for No Trump, 5 for pass, 6 for double, 7 for redouble
 
     @Column(name = "level")
     private int level; // 1 to 7 for bid levels
 
-    @Column(name = "isDouble")
-    private int isDouble; // 0 for false, 1 for true
+    @Column(name = "isDoubled")
+    private int isDoubled; // 0 for false, 1 for true
 
     @Column(name = "isRedoubled")
     private int isRedoubled; // 0 for false, 1 for true
@@ -30,20 +30,20 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(int direction, int suit, int level, int isDouble, int isRedoubled) {
+    public Bid(int direction, int suit, int level, int isDoubled, int isRedoubled) {
         this.direction = direction;
         this.suit = suit;
         this.level = level;
-        this.isDouble = isDouble;
+        this.isDoubled = isDoubled;
         this.isRedoubled = isRedoubled;
     }
 
     // Getters and Setters
-    public Long getBidId() {
+    public int getBidId() {
         return bidId;
     }
 
-    public void setBidId(Long bidId) {
+    public void setBidId(int bidId) {
         this.bidId = bidId;
     }
 
@@ -71,12 +71,12 @@ public class Bid {
         this.level = level;
     }
 
-    public int getIsDouble() {
-        return isDouble;
+    public int getIsDoubled() {
+        return isDoubled;
     }
 
-    public void setIsDouble(int isDouble) {
-        this.isDouble = isDouble;
+    public void setIsDoubled(int isDoubled) {
+        this.isDoubled = isDoubled;
     }
 
     public int getIsRedoubled() {
@@ -94,7 +94,7 @@ public class Bid {
                 ", direction=" + direction +
                 ", suit=" + suit +
                 ", level=" + level +
-                ", isDouble=" + isDouble +
+                ", isDouble=" + isDoubled +
                 ", isRedoubled=" + isRedoubled +
                 '}';
     }

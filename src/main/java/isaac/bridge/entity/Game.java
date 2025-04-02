@@ -1,7 +1,6 @@
 package isaac.bridge.entity;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 
 @Entity
@@ -11,22 +10,22 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "gameId")
-    private Long id;
+    private int gameId;
 
+    @Column(name = "northId", nullable = false)
+    private int northId;
+
+    @Column(name = "southId", nullable = false)
+    private int southId;
+
+    @Column(name = "eastId", nullable = false)
+    private int eastId;
+
+    @Column(name = "westId", nullable = false)
+    private int westId;
+    
     @Column(name = "dealerDirection")
     private int dealerDirection;
-
-    @Column(name = "northId")
-    private long northId;
-
-    @Column(name = "southId")
-    private long southId;
-
-    @Column(name = "eastId")
-    private long eastId;
-
-    @Column(name = "westId")
-    private long westId;
 
     @Column(name = "northSouthScore")
     private int northSouthScore;
@@ -48,7 +47,7 @@ public class Game {
         rounds = new ArrayList<>();
     }
 
-    public Game(long northId, long eastId, long southId, long westId) {
+    public Game(int northId, int eastId, int southId, int westId) {
         this.northId = northId;
         this.eastId = eastId;
         this.southId = southId;
@@ -57,16 +56,12 @@ public class Game {
     }
 
     // Getters and setters
-    public Long getId() {
-        return id;
+    public int getId() {
+        return gameId;
     }
 
-    /**
-     * Only to be used for testing!
-     * @param id
-     */
-    public void setId(long id) {
-        this.id = id;
+    public void setId(int id) {
+        this.gameId = id;
     }
 
     public int getDealerDirection() {
@@ -93,6 +88,23 @@ public class Game {
         this.eastWestScore = eastWestScore;
     }
 
+    // Only getters for player IDs
+    public int getNorthId() {
+        return northId;
+    }
+
+    public int getSouthId() {
+        return southId;
+    }
+
+    public int getEastId() {
+        return eastId;
+    }
+
+    public int getWestId() {
+        return westId;
+    }
+
     public ArrayList<Round> getRounds() {
         return rounds;
     }
@@ -104,12 +116,24 @@ public class Game {
     public Round getCurrentRound() {
         return rounds.get(rounds.size() - 1);
     }
+    
+    public GameState getState() {
+        return state;
+    }
+    
+    public void setState(GameState state) {
+        this.state = state;
+    }
 
     @Override
     public String toString() {
         return "Game{" +
-                "id=" + id +
+                "id=" + gameId +
                 ", dealerDirection=" + dealerDirection +
+                ", northId=" + northId +
+                ", southId=" + southId +
+                ", eastId=" + eastId +
+                ", westId=" + westId +
                 ", northSouthScore=" + northSouthScore +
                 ", eastWestScore=" + eastWestScore +
                 '}';

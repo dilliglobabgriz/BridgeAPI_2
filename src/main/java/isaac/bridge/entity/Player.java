@@ -9,7 +9,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "playerId")
-    private Long playerId;
+    private int playerId;
 
     @Column(name = "botVersion")
     private int botVersion; // 0 for human player, 1 for bot
@@ -29,11 +29,11 @@ public class Player {
     }
 
     // Getters and Setters
-    public Long getPlayerId() {
+    public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(Long playerId) {
+    public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
 
