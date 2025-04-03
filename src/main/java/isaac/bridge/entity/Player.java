@@ -14,15 +14,15 @@ public class Player {
     @Column(name = "botVersion")
     private int botVersion = 1; // 0 for human player, 1 for bot
 
-    @Column(name = "name")
-    private String name = "Computer"; // Player's name, default to "Computer"
+    @Column(name = "playerName")
+    private String playerName = "Computer"; // Player's name, default to "Computer"
 
     // Constructors
     public Player() {
     }
 
     public Player(String name, int botVersion) {
-        this.name = name;
+        this.playerName = name;
         this.botVersion = botVersion;
     }
 
@@ -43,19 +43,19 @@ public class Player {
         this.botVersion = botVersion;
     }
 
-    public String getName() {
-        return name;
+    public String getPlayerName() {
+        return playerName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPlayerName(String name) {
+        this.playerName = name;
     }
 
     @Override
     public String toString() {
         return "Player{" +
                 "playerId=" + playerId +
-                ", name='" + name + '\'' +
+                ", name='" + playerName + '\'' +
                 ", botVersion=" + botVersion +
                 '}';
     }

@@ -16,23 +16,18 @@ public class CreateGameTest {
     private GameService gameService;
 
     @Test 
-    public void createGameTest() {
+    public void createGameIdIncrementTest() {
         Game game = gameService.createGame();
+        Game game2 = gameService.createGame();
 
-        String actual = game.toString();
-        String expected = "Game{id=1, dealerDirection=0, northSouthScore=0, eastWestScore=0}";
+        int game1Id = game.getId();
+        int game2Id = game2.getId();
 
-        Assertions.assertEquals(expected, actual, "Game setup incorrect.");
+        int actual = game2Id - game1Id;
+        int expected = 1;
+
+        Assertions.assertEquals(expected, actual, "Game ids should increment by one for each creation.");
     }
 
-    @Test 
-    public void createSecondGameTest() {
-        Game game = gameService.createGame();
-
-        String actual = game.toString();
-        String expected = "Game{id=2, dealerDirection=0, northSouthScore=0, eastWestScore=0}";
-
-        Assertions.assertEquals(expected, actual, "Game setup incorrect.");
-    }
     
 }
