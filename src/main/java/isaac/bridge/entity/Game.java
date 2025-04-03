@@ -114,6 +114,9 @@ public class Game {
     }
 
     public Round getCurrentRound() {
+        if (rounds.size() == 0) {
+            return null;
+        }
         return rounds.get(rounds.size() - 1);
     }
     

@@ -1,5 +1,7 @@
 package isaac.bridge.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +21,6 @@ public class GameApiController {
         this.gameService = gameService;
     }
     
-    @GetMapping 
-    public ResponseEntity<String> homepage() {
-        String message = "Hello World";
-        return ResponseEntity.ok().body(message);
-    }
 
     /**
      * Creates a game with four default version bot players
@@ -35,6 +32,11 @@ public class GameApiController {
         return ResponseEntity.ok().body(gameService.createGame().getId());
     }
 
+    @GetMapping
+    public ResponseEntity<List<Game>> getGames() {
+        List<Game> games = gameService.getAllGames();
+        return ResponseEntity.ok().body(games);
+    }
 
     
 }
