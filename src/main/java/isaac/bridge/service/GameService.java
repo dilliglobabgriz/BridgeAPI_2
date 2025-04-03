@@ -50,4 +50,8 @@ public class GameService {
 
         return playerRepository.save(bot);
     }
+
+    public List<Game> getAllGames() {
+        return gameRepository.findAll();
+    }
 }
