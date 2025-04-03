@@ -5,11 +5,15 @@ A Java Spring Boot application for playing the game of Bridge.
 
 ## 📚 **How to Use**
 
-The project is currently under development. To run tests, use Maven with the following command:
+The project is currently under development. To try out the API, use Maven with the following command:
 
 ```bash
-mvn test
+mvn spring-boot:run
 ```
+
+This will create an Apache Tomcat server on port 8080 where you can do the following
+1. Create new games with ```POST /api/games```
+2. Fetch all existing games with ```GET /api/games```
 
 ---
 
@@ -18,65 +22,93 @@ mvn test
 ---
 
 ### 🧑‍💻 **Player**
-| Column    | Type        | Constraints                | Description          |
-|-----------|-------------|----------------------------|----------------------|
-| `playerId` | `integer`      | PRIMARY KEY AUTO_INCREMENT | Player identifier    |
-| `botVersion` | `integer` | DEFAULT 1                  | 0 for human player   |
-| `name`    | `TEXT      ` | DEFAULT 'Computer'      | Player name          |
+| Column      | Type          | Constraints                     | Description            |
+|-------------|---------------|----------------------------------|------------------------|
+| `playerId`  | `INTEGER`     | PRIMARY KEY, AUTO_INCREMENT      | Player identifier      |
+| `botVersion`| `INTEGER`     | DEFAULT 1                        | 0 for human player     |
+| `name`      | `VARCHAR(255)`| DEFAULT 'Computer'               | Player name            |
 
 ---
 
 ### 🎮 **Game**
-| Column               | Type      | Constraints                    | Description                  |
-|----------------------|-----------|--------------------------------|------------------------------|
-| `gameId`             | `integer`    | PRIMARY KEY AUTO_INCREMENT     | Game identifier              |
-| `northId`            | `integer`    | FOREIGN KEY                    | North player ID              |
-| `eastId`             | `integer`    | FOREIGN KEY                    | East player ID               |
-| `southId`            | `integer`    | FOREIGN KEY                    | South player ID              |
-| `westId`             | `integer`    | FOREIGN KEY                    | West player ID               |
-| `firstDealerDirection` | `integer` | DEFAULT 0                     | [0-3] refers to N, S, E, W   |
-| `northSouthScore`    | `integer` | DEFAULT 0                      | Update after each hand       |
-| `eastWestScore`      | `integer` | DEFAULT 0                      | Update after each hand       |
-
----
-
-### 🃏 **Bid**
-| Column      | Type    | Constraints                | Description                 |
-|-------------|---------|----------------------------|-----------------------------|
-| `bidId`     | `integer`  | PRIMARY KEY AUTO_INCREMENT | Bid identifier              |
-| `direction` | `integer` | NOT NULL                    | [0-3] refers to N, S, E, W  |
-| `suit`      | `integer` | NOT NULL                    | [0-7] C,D,H,S,NT,P,X,R      |
-| `level`     | `integer` | NOT NULL                    | [1-7]                       |
-| `isDoubled`  | `integer` | DEFAULT 0                  | 0 for false, 1 for true     |
-| `isRedoubled` | `integer` | DEFAULT 0                | 0 for false, 1 for true     |
+| Column                | Type        | Constraints                           | Description                      |
+|-----------------------|-------------|---------------------------------------|----------------------------------|
+| `gameId`              | `INTEGER`   | PRIMARY KEY, AUTO_INCREMENT           | Game identifier                  |
+| `northId`             | `INTEGER`   | FOREIGN KEY                           | North player ID                  |
+| `eastId`              | `INTEGER`   | FOREIGN KEY                           | East player ID                   |
+| `southId`             | `INTEGER`   | FOREIGN KEY                           | South player ID                  |
+| `westId`              | `INTEGER`   | FOREIGN KEY                           | West player ID                   |
+| `firstDealerDirection`| `INTEGER`   | DEFAULT 0                             | [0-3] refers to N, S, E, W       |
+| `northSouthScore`     | `INTEGER`   | DEFAULT 0                             | North-South team score           |
+| `eastWestScore`       | `INTEGER`   | DEFAULT 0                             | East-West team score             |
 
 ---
 
 ### 🔄 **Round**
-| Column                 | Type      | Constraints                    | Description                  |
-|------------------------|-----------|--------------------------------|------------------------------|
-| `roundId`              | `integer`    | PRIMARY KEY AUTO_INCREMENT     | Round identifier             |
-| `gameId`               | `integer`    | FOREIGN KEY                    | Associated game ID           |
-| `winningBidId`         | `integer`    | FOREIGN KEY                    | Associated winning bid       |
-| `dealerDirection`      | `integer` | NOT NULL                          | [0-3] refers to N, S, E, W   |
-| `northSouthTricksTaken` | `integer` | DEFAULT 0                        | Tricks taken by N/S          |
-| `eastWestTricksTaken`  | `integer` | DEFAULT 0                         | Tricks taken by E/W          |
-| `bidHistory`           | `TEXT`    |                                | String of bids               |
-| `trickHistory`         | `TEXT`    |                                | String of tricks             |
+| Column                 | Type        | Constraints                           | Description                      |
+|------------------------|-------------|---------------------------------------|----------------------------------|
+| `roundId`              | `INTEGER`   | PRIMARY KEY, AUTO_INCREMENT           | Round identifier                 |
+| `gameId`               | `INTEGER`   | FOREIGN KEY                           | Associated game ID               |
+| `roundNumber`          | `INTEGER`   | NOT NULL                              | Sequence number within the game  |
+| `dealerDirection`      | `INTEGER`   | NOT NULL                              | [0-3] refers to N, S, E, W       |
+| `declarerDirection`    | `INTEGER`   | NOT NULL                              | [0-3] refers to N, S, E, W       |
+| `northSouthVulnerable` | `INTEGER`   | DEFAULT 0                             | 0=No, 1=Yes                      |
+| `eastWestVulnerable`   | `INTEGER`   | DEFAULT 0                             | 0=No, 1=Yes                      |
+| `contractSuit`         | `INTEGER`   |                                       | e.g., 0=C, 1=D, 2=H, 3=S, 4=NT  |
+| `contractLevel`        | `INTEGER`   |                                       | 1-7                              |
+| `contractModifier`     | `INTEGER`   | DEFAULT 0                             | 0=Undoubled, 1=Doubled, 2=Redoubled |
+| `northSouthTricksTaken`| `INTEGER`   | DEFAULT 0                             | Tricks taken by N/S              |
+| `eastWestTricksTaken`  | `INTEGER`   | DEFAULT 0                             | Tricks taken by E/W              |
 
 ---
 
 ### 🃏 **Hand**
-| Column   | Type      | Constraints               | Description                             |
-|----------|-----------|---------------------------|-----------------------------------------|
-| `roundId`  | `integer`      | FOREIGN KEY               | Associated round identifier            |
-| `playerId` | `integer`      | FOREIGN KEY               | Associated player identifier           |
-| `cards`    | `varchar(51)`    | NOT NULL                | A string representing the 13 cards dealt to the player (e.g., "2H, 3S, AH, KC, 7D, 9C, QH, JS, TS, 8D, KH, 4C, 6H") |
+| Column      | Type        | Constraints                     | Description                                               |
+|-------------|-------------|----------------------------------|-----------------------------------------------------------|
+| `handId`    | `INTEGER`   | PRIMARY KEY, AUTO_INCREMENT      | Hand identifier                                           |
+| `roundId`   | `INTEGER`   | FOREIGN KEY                      | Associated round identifier                               |
+| `playerId`  | `INTEGER`   | FOREIGN KEY                      | Associated player identifier                              |
+| `cards`     | `VARCHAR(255)` | NOT NULL                      | A string representing the 13 cards dealt to the player (e.g., "2H, 3S, AH, KC, 7D, 9C, QH, JS, TS, 8D, KH, 4C, 6H") |
+
+---
+
+### 🃏 **Bid**
+| Column      | Type        | Constraints                     | Description                     |
+|-------------|-------------|----------------------------------|---------------------------------|
+| `bidId`     | `INTEGER`   | PRIMARY KEY, AUTO_INCREMENT      | Bid identifier                  |
+| `direction` | `INTEGER`   | NOT NULL                         | [0-3] refers to N, S, E, W      |
+| `suit`      | `INTEGER`   | NOT NULL                         | [0-7] C, D, H, S, NT, P, X, R   |
+| `level`     | `INTEGER`   | NOT NULL                         | [1-7]                            |
+| `isDoubled` | `INTEGER`   | DEFAULT 0                        | 0 for false, 1 for true          |
+| `isRedoubled` | `INTEGER` | DEFAULT 0                        | 0 for false, 1 for true          |
+
+---
+
+### 🃏 **Trick**
+| Column            | Type        | Constraints                     | Description                                               |
+|-------------------|-------------|----------------------------------|-----------------------------------------------------------|
+| `trickId`         | `INTEGER`   | PRIMARY KEY, AUTO_INCREMENT      | Trick identifier                                           |
+| `roundId`         | `INTEGER`   | FOREIGN KEY                      | Associated round identifier                               |
+| `trickNumber`     | `INTEGER`   | NOT NULL                         | Trick number (1-13)                                        |
+| `leaderDirection` | `INTEGER`   | NOT NULL                         | Player direction leading the trick (0-3)                  |
+| `winningDirection`| `INTEGER`   | NOT NULL                         | Player direction winning the trick (0-3)                  |
+
+---
+
+### 🃏 **Card**
+| Column            | Type        | Constraints                     | Description                                               |
+|-------------------|-------------|----------------------------------|-----------------------------------------------------------|
+| `cardId`          | `INTEGER`   | PRIMARY KEY, AUTO_INCREMENT      | Card identifier                                            |
+| `trickId`         | `INTEGER`   | FOREIGN KEY                      | Associated trick identifier                               |
+| `playerDirection` | `INTEGER`   | NOT NULL                         | Direction of the player playing the card (0-3)            |
+| `suit`            | `INTEGER`   | NOT NULL                         | e.g., 0=C, 1=D, 2=H, 3=S                                 |
+| `rank`            | `INTEGER`   | NOT NULL                         | e.g., 2-10, 11=J, 12=Q, 13=K, 14=A                       |
+| `playSequence`    | `INTEGER`   | NOT NULL                         | Order card played in the trick (0-3)                      |
 
 ---
 
 💚 **New Addition:**  
-- `bidHistory` and `trickHistory` stores serialized bids as strings for easy retrieval and analysis.
+- Added Trick and Bid tables with more detail to accurately track the history of the bids and each card played in a round
 
 
 ## ⚙️ **Project Overview**
