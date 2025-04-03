@@ -16,6 +16,9 @@ public class RoundService {
 
     @Autowired
     private RoundRepository roundRepository;
+
+    @Autowired 
+    private HandService handService;
     
     /**
      * Creates a new round instance connected to a game id
@@ -39,9 +42,17 @@ public class RoundService {
             newRoundDealer = rounds.get(rounds.size() - 1).getNextDealerDirection();
         }
 
-        Round newRound = new Round(game.getId(), newRoundDealer, 1);
+        // Determine the round number
+        List<Round> previousRounds = roundRepository.findAllByGameId(game.getId()).orElse(null);
+        int roundCount = (previousRounds != null) ? previousRounds.size() : 0;
 
-        return roundRepository.save(newRound);
+        Round newRound = new Round(game.getId(), newRoundDealer, roundCount+1);
+
+        Round addedRound = roundRepository.save(newRound);
+
+        handService.dealHands(addedRound, game);
+
+        return addedRound;
     }
 
     public void populateHands(Game game, long roundId) {
@@ -50,6 +61,10 @@ public class RoundService {
 
     public List<Round> getAllRounds() {
         return roundRepository.findAll();
+    }
+
+    public List<Round> getRoundsByGameId(int gameId) {
+        return roundRepository.findAllByGameId(gameId).orElse(null);
     }
 
 }

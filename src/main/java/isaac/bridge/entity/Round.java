@@ -166,7 +166,7 @@ public class Round {
         String[] deck = new String[52];
 
         String[] suits = {"C", "D", "H", "S"};
-        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"};
 
         for (int rankIndex = 0; rankIndex < 13; rankIndex++) {
             for (int suitIndex = 0; suitIndex < 4; suitIndex++) {
