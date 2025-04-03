@@ -12,15 +12,13 @@ public class Player {
     private int playerId;
 
     @Column(name = "botVersion")
-    private int botVersion; // 0 for human player, 1 for bot
+    private int botVersion = 1; // 0 for human player, 1 for bot
 
     @Column(name = "name")
-    private String name; // Player's name, default to "Computer"
+    private String name = "Computer"; // Player's name, default to "Computer"
 
     // Constructors
     public Player() {
-        this.name = "Computer"; // Default name for bot players
-        this.botVersion = 1;    // Default to bot version
     }
 
     public Player(String name, int botVersion) {

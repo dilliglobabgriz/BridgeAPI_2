@@ -11,6 +11,9 @@ public class Bid {
     @Column(name = "bidId")
     private int bidId;
 
+    @Column(name = "roundId") 
+    private int roundId;
+
     @Column(name = "direction")
     private int direction; // 0 for North, 1 for East, 2 for South, 3 for West
 
@@ -20,22 +23,22 @@ public class Bid {
     @Column(name = "level")
     private int level; // 1 to 7 for bid levels
 
-    @Column(name = "isDoubled")
-    private int isDoubled; // 0 for false, 1 for true
+    @Column(name = "bidType")
+    private int bidType;
 
-    @Column(name = "isRedoubled")
-    private int isRedoubled; // 0 for false, 1 for true
+    @Column(name = "bidSequence") 
+    private int bidSequence;
 
     // Constructors
     public Bid() {
     }
 
-    public Bid(int direction, int suit, int level, int isDoubled, int isRedoubled) {
+    public Bid(int direction, int suit, int level, int bidType, int bidSequence) {
         this.direction = direction;
         this.suit = suit;
         this.level = level;
-        this.isDoubled = isDoubled;
-        this.isRedoubled = isRedoubled;
+        this.bidType = bidType;
+        this.bidSequence = bidSequence;
     }
 
     // Getters and Setters
@@ -71,20 +74,20 @@ public class Bid {
         this.level = level;
     }
 
-    public int getIsDoubled() {
-        return isDoubled;
+    public int getBidType() {
+        return bidType;
     }
 
-    public void setIsDoubled(int isDoubled) {
-        this.isDoubled = isDoubled;
+    public void setBidType(int bidType) {
+        this.bidType = bidType;
     }
 
-    public int getIsRedoubled() {
-        return isRedoubled;
+    public int getBidSequence() {
+        return bidSequence;
     }
 
-    public void setIsRedoubled(int isRedoubled) {
-        this.isRedoubled = isRedoubled;
+    public void setBidSequence(int bidSequence) {
+        this.bidSequence = bidSequence;
     }
 
     @Override
@@ -94,8 +97,8 @@ public class Bid {
                 ", direction=" + direction +
                 ", suit=" + suit +
                 ", level=" + level +
-                ", isDouble=" + isDoubled +
-                ", isRedoubled=" + isRedoubled +
+                ", bidType=" + bidType +
+                ", bidSequence=" + bidSequence +
                 '}';
     }
 }

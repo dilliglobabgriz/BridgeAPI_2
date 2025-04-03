@@ -1,7 +1,6 @@
 package isaac.bridge.entity;
 
 import java.util.Random;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -9,53 +8,60 @@ import jakarta.persistence.*;
 public class Round {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "roundId")
     private int roundId;
 
     @Column(name = "gameId", nullable = false)
     private int gameId;
 
-    @Column(name = "winningBidId", nullable = false)
-    private int winningBidId;
+    @Column(name = "roundNumber")
+    private int roundNumber;
 
-    @Column(name = "dealerDirection", nullable = false)
+    @Column(name = "dealerDirection")
     private int dealerDirection; // 0-3 for N, E, S, W
 
-    @Column(name = "northSouthTricksTaken", nullable = false)
+    @Column(name = "declarerDirection") 
+    private int declarerDirection;
+
+    @Column(name = "northSouthVulnerable") 
+    private int northSouthVulnerable = 0;
+    
+    @Column(name = "eastWestVulnerable") 
+    private int eastWestVulnerable = 0;
+
+    // Contract information
+    @Column(name = "contractSuit")
+    private int contractSuit;
+
+    @Column(name = "contractLevel")
+    private int contractLevel;
+
+    @Column(name = "contractModifier")
+    private int contractModifier = 0;
+
+    // Update after hand is played
+    @Column(name = "northSouthTricksTaken")
     private int northSouthTricksTaken = 0;
 
-    @Column(name = "eastWestTricksTaken", nullable = false)
+    @Column(name = "eastWestTricksTaken")
     private int eastWestTricksTaken = 0;
 
-    @Column(name = "bidHistory")
-    private String bidHistory;
-
-    @Column(name = "trickHistory")
-    private String trickHistory;
-
-    /**
-     * An array of 52 cards that is shuffled once when the round is initialized
-     * Each player's hand is a 13 card section of the shuffled deck
-     * After the round is completed the deck is converted into 4 strings and saved to the DB
-     */
     @Transient
     private String[] deck;
 
     public Round() {
-        // Initialize deck in try-catch to prevent issues during JPA entity loading
         try {
             deck = fillDeck();
         } catch (Exception e) {
-            // Silent catch to allow JPA entity loading
             deck = new String[52];
         }
     }
 
-    public Round(int gameId, int dealerDirection) {
+    public Round(int gameId, int dealerDirection, int roundNumber) {
         this.gameId = gameId;
-        this.dealerDirection = dealerDirection;
-        this.winningBidId = 0; // Default value to match NOT NULL constraint
+        this.dealerDirection = dealerDirection; 
+        this.roundNumber = roundNumber;
         deck = fillDeck();
     }
 
@@ -76,12 +82,8 @@ public class Round {
         this.gameId = gameId;
     }
 
-    public int getWinningBidId() {
-        return winningBidId;
-    }
-
-    public void setWinningBidId(int winningBidId) {
-        this.winningBidId = winningBidId;
+    public int getRoundNumber() {
+        return roundNumber;
     }
 
     public int getDealerDirection() {
@@ -92,6 +94,54 @@ public class Round {
         this.dealerDirection = dealerDirection;
     }
 
+    public int getDeclarerDirection() {
+        return declarerDirection;
+    }
+
+    public void setDeclarerDirection(int declarerDirection) {
+        this.declarerDirection = declarerDirection;
+    }
+
+    public int getNorthSouthVulnerable() {
+        return northSouthVulnerable;
+    }
+
+    public void setNorthSouthVulnerable(int northSouthVulnerable) {
+        this.northSouthVulnerable = northSouthVulnerable;
+    }
+
+    public int getEastWestVulnerable() {
+        return eastWestVulnerable;
+    }
+
+    public void setEastWestVulnerable(int eastWestVulnerable) {
+        this.eastWestVulnerable = eastWestVulnerable;
+    }
+
+    public int getContractSuit() {
+        return contractSuit;
+    }
+
+    public void setContractSuit(int contractSuit) {
+        this.contractSuit = contractSuit;
+    }
+
+    public int getContractLevel() {
+        return contractLevel;
+    }
+
+    public void setContractLevel(int contractLevel) {
+        this.contractLevel = contractLevel;
+    }
+
+    public int getContractModifier() {
+        return contractModifier;
+    }
+
+    public void setContractModifier(int contractModifier) {
+        this.contractModifier = contractModifier;
+    }
+
     public int getNorthSouthTricksTaken() {
         return northSouthTricksTaken;
     }
@@ -99,29 +149,13 @@ public class Round {
     public void setNorthSouthTricksTaken(int northSouthTricksTaken) {
         this.northSouthTricksTaken = northSouthTricksTaken;
     }
- 
+
     public int getEastWestTricksTaken() {
         return eastWestTricksTaken;
     }
 
     public void setEastWestTricksTaken(int eastWestTricksTaken) {
         this.eastWestTricksTaken = eastWestTricksTaken;
-    }
-
-    public String getBidHistory() {
-        return bidHistory;
-    }
-
-    public void setBidHistory(String bidHistory) {
-        this.bidHistory = bidHistory;
-    }
-
-    public String getTrickHistory() {
-        return trickHistory;
-    }
-
-    public void setTrickHistory(String trickHistory) {
-        this.trickHistory = trickHistory;
     }
 
     public String[] getDeck() {
@@ -132,42 +166,28 @@ public class Round {
         String[] deck = new String[52];
 
         String[] suits = {"C", "D", "H", "S"};
-
         String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
 
-        for (int rankIndex=0; rankIndex<13; rankIndex++) {
-            for (int suitIndex=0; suitIndex<4; suitIndex++) {
-                deck[rankIndex*4 + suitIndex] = ranks[rankIndex] + suits[suitIndex];
+        for (int rankIndex = 0; rankIndex < 13; rankIndex++) {
+            for (int suitIndex = 0; suitIndex < 4; suitIndex++) {
+                deck[rankIndex * 4 + suitIndex] = ranks[rankIndex] + suits[suitIndex];
             }
         }
 
         shuffleDeck(deck);
-        
         return deck;
     }
 
-    /**
-     * Fisher Yates random shuffle
-     * 
-     * @param deck
-     */
     public void shuffleDeck(String[] deck) {
         Random rand = new Random();
-
-        for (int i=deck.length-1; i>0; i--) {
-            int j = rand.nextInt(i+1);
-
+        for (int i = deck.length - 1; i > 0; i--) {
+            int j = rand.nextInt(i + 1);
             String temp = deck[i];
             deck[i] = deck[j];
             deck[j] = temp;
         }
     }
 
-    /**
-     * Finds the index of the next rounds dealer using mod operator
-     * 
-     * @return dealer direction 0-3
-     */
     public int getNextDealerDirection() {
         return (dealerDirection + 1) % 4;
     }
@@ -177,8 +197,13 @@ public class Round {
         return "Round{" +
                 "roundId=" + roundId +
                 ", gameId=" + gameId + 
-                ", winningBidId='" + winningBidId + '\'' +
                 ", dealerDirection=" + dealerDirection +
+                ", declarerDirection=" + declarerDirection +
+                ", northSouthVulnerable=" + northSouthVulnerable +
+                ", eastWestVulnerable=" + eastWestVulnerable +
+                ", contractSuit=" + contractSuit +
+                ", contractLevel=" + contractLevel +
+                ", contractModifier=" + contractModifier +
                 ", northSouthTricksTaken=" + northSouthTricksTaken +
                 ", eastWestTricksTaken=" + eastWestTricksTaken +
                 '}';

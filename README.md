@@ -94,19 +94,20 @@ Currently using:
 
 ## 🚀 **Steps to Play**
 1. **Initialize 4 players**
-    - Create 4 bot players.
+    - CREATE 4 bot players.
 2. **Initialize a new game**
     - Connect player IDs to the game and save to DB.
 3. **Initialize a new round**
-    - Deal 13 cards per player.
+    - CREATE a round with with only game id initialized
+    - Deal 13 cards per player
 4. **Start the bidding process**
     - Get bids from each player until a final contract is determined.
-    - Save the winning contract and the player who bid it to the hand.
-    - Serialize bid history and add to round instance
+    - UPDATE the winning contract and the player who bid it to the hand.
+    - Serialize bid history and UPDATE round
 5. **Start the trick-taking process**
     - Get one card from each player, starting with the left of the dealer.
     - Determine who won the trick and update the score.
-    - Serialize trick history and add to round instance
+    - Serialize trick history and UPDATE to round
 6. **Score the round**
     - Determine the score based on the contract, tricks taken, and vulnerability.
 7. **Save round to the DB**

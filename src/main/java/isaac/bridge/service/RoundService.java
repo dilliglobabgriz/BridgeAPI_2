@@ -33,14 +33,14 @@ public class RoundService {
         int newRoundDealer;
 
         if (rounds.isEmpty()) {
-            newRoundDealer = game.getDealerDirection();
+            newRoundDealer = game.getFirstDealerDirection();
         } else {
             newRoundDealer = rounds.get(rounds.size() - 1).getNextDealerDirection();
         }
 
-        Round newRound = new Round(game.getId(), newRoundDealer);
+        Round newRound = new Round(game.getId(), newRoundDealer, 1);
 
-        return newRound;
+        return roundRepository.save(newRound);
     }
 
     public void populateHands(Game game, long roundId) {

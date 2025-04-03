@@ -9,8 +9,9 @@ public class Hand {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "handId")
-    private int handId;  // Unique ID for Hand, no inter using roundId as the primary key
+    private int handId;
 
+    // Round and player id make up primary key
     @Column(name = "roundId", nullable = false)  // Foreign key to Round
     private int roundId;
 
@@ -65,7 +66,6 @@ public class Hand {
     @Override
     public String toString() {
         return "Hand{" +
-                "handId=" + handId +
                 ", roundId=" + roundId +
                 ", playerId=" + playerId +
                 ", cards='" + cards + '\'' +

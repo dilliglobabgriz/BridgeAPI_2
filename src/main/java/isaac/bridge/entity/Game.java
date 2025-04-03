@@ -24,14 +24,14 @@ public class Game {
     @Column(name = "westId", nullable = false)
     private int westId;
     
-    @Column(name = "dealerDirection")
-    private int dealerDirection;
+    @Column(name = "firstDealerDirection")
+    private int firstDealerDirection = 0;
 
     @Column(name = "northSouthScore")
-    private int northSouthScore;
+    private int northSouthScore = 0;
 
     @Column(name = "eastWestScore")
-    private int eastWestScore;
+    private int eastWestScore = 0;
 
     @Transient
     private GameState state;
@@ -64,12 +64,12 @@ public class Game {
         this.gameId = id;
     }
 
-    public int getDealerDirection() {
-        return dealerDirection;
+    public int getFirstDealerDirection() {
+        return firstDealerDirection;
     }
 
-    public void setDealerDirection(int dealerDirection) {
-        this.dealerDirection = dealerDirection;
+    public void setFirstDealerDirection(int firstDealerDirection) {
+        this.firstDealerDirection = firstDealerDirection;
     }
 
     public int getNorthSouthScore() {
@@ -129,7 +129,7 @@ public class Game {
     public String toString() {
         return "Game{" +
                 "id=" + gameId +
-                ", dealerDirection=" + dealerDirection +
+                ", firstDealerDirection=" + firstDealerDirection +
                 ", northId=" + northId +
                 ", southId=" + southId +
                 ", eastId=" + eastId +
