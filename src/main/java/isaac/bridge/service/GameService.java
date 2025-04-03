@@ -54,4 +54,8 @@ public class GameService {
     public List<Game> getAllGames() {
         return gameRepository.findAll();
     }
+
+    public Game getGameById(int id) {
+        return gameRepository.findById(id).orElse(null);
+    }
 }

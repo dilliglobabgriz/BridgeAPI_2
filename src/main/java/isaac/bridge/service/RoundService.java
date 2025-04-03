@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import isaac.bridge.entity.Game;
 import isaac.bridge.entity.Round;
@@ -45,6 +46,10 @@ public class RoundService {
 
     public void populateHands(Game game, long roundId) {
 
+    }
+
+    public List<Round> getAllRounds() {
+        return roundRepository.findAll();
     }
 
 }

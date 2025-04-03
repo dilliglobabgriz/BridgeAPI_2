@@ -48,7 +48,7 @@ public class Round {
     private int eastWestTricksTaken = 0;
 
     @Transient
-    private String[] deck;
+    private transient String[] deck;
 
     public Round() {
         try {
