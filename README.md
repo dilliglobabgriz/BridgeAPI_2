@@ -76,11 +76,12 @@ This will create an Apache Tomcat server on port 8080 where you can do the follo
 | Column      | Type        | Constraints                     | Description                     |
 |-------------|-------------|----------------------------------|---------------------------------|
 | `bidId`     | `INTEGER`   | PRIMARY KEY, AUTO_INCREMENT      | Bid identifier                  |
+| `roundId`   | `INTEGER`   | FOREIGN KEY                      | Associated round identifier     |
 | `direction` | `INTEGER`   | NOT NULL                         | [0-3] refers to N, S, E, W      |
-| `suit`      | `INTEGER`   | NOT NULL                         | [0-7] C, D, H, S, NT, P, X, R   |
-| `level`     | `INTEGER`   | NOT NULL                         | [1-7]                            |
-| `isDoubled` | `INTEGER`   | DEFAULT 0                        | 0 for false, 1 for true          |
-| `isRedoubled` | `INTEGER` | DEFAULT 0                        | 0 for false, 1 for true          |
+| `suit`      | `INTEGER`   |                                  | [0-4] C, D, H, S, NT            |
+| `level`     | `INTEGER`   |                                  | [1-7]                            |
+| `bidType`   | `INTEGER`   | NOT NULL                         | [0-3] P, Bid, X, XX              |
+| `bidSequence` | `INTEGER` | NOT NULL                         | Order bid is added to round      |
 
 ---
 
@@ -91,7 +92,7 @@ This will create an Apache Tomcat server on port 8080 where you can do the follo
 | `roundId`         | `INTEGER`   | FOREIGN KEY                      | Associated round identifier                               |
 | `trickNumber`     | `INTEGER`   | NOT NULL                         | Trick number (1-13)                                        |
 | `leaderDirection` | `INTEGER`   | NOT NULL                         | Player direction leading the trick (0-3)                  |
-| `winningDirection`| `INTEGER`   | NOT NULL                         | Player direction winning the trick (0-3)                  |
+| `winningDirection`| `INTEGER`   |                                  | Player direction winning the trick (0-3)                  |
 
 ---
 
