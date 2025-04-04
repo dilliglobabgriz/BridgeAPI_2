@@ -20,8 +20,11 @@ public class Trick {
     @Column(name = "leaderDirection", nullable = false)
     private int leaderDirection;
 
+    /**
+     * Default to -1 to show trick is not yet completed
+     */
     @Column(name = "winningDirection")
-    private int winningDirection;
+    private int winningDirection = -1;
 
     public Trick() {
     }

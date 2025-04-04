@@ -25,13 +25,15 @@ public class GameApiController {
     private HandService handService;
     private BidService bidService;
     private TrickService trickService;
+    private CardService cardService;
 
-    public GameApiController(GameService gameService, RoundService roundService, HandService handService, BidService bidService, TrickService trickService) {
+    public GameApiController(GameService gameService, RoundService roundService, HandService handService, BidService bidService, TrickService trickService, CardService cardService) {
         this.gameService = gameService;
         this.roundService = roundService;
         this.handService = handService;
         this.bidService = bidService;
         this.trickService = trickService;
+        this.cardService = cardService;
     }
     
 
@@ -115,7 +117,7 @@ public class GameApiController {
     }
 
     @PostMapping(path = "bids")
-    public ResponseEntity<Bid> makeBid(@PathVariable int roundId, @RequestBody Bid bid) {
+    public ResponseEntity<Bid> makeBid(@RequestBody Bid bid) {
         try {
             Bid addedBid = bidService.addBid(bid);
             return ResponseEntity.ok().body(addedBid);
@@ -129,6 +131,16 @@ public class GameApiController {
     public ResponseEntity<List<Trick>> getTricksByRoundId(@PathVariable int roundId) {
         List<Trick> tricks = trickService.getTricksByRoundId(roundId);
         return ResponseEntity.ok().body(tricks);
+    }
+
+    @PostMapping(path = "cards")
+    public ResponseEntity<Card> addCardToTrick(@RequestBody Card card) {
+        try {
+            Card addedCard = cardService.addCard(card);
+            return ResponseEntity.ok().body(addedCard);
+        } catch (ClientErrorException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     
