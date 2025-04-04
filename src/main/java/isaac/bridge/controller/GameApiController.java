@@ -7,16 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import isaac.bridge.entity.Game;
-import isaac.bridge.entity.Hand;
-import isaac.bridge.entity.Round;
+import isaac.bridge.entity.*;
+import isaac.bridge.service.*;
+import isaac.bridge.exception.ClientErrorException;
 import isaac.bridge.exception.ClientInvalidIdException;
-import isaac.bridge.service.GameService;
-import isaac.bridge.service.HandService;
-import isaac.bridge.service.RoundService;
 
 @RestController 
 @RequestMapping(path = "/api")
@@ -25,11 +23,15 @@ public class GameApiController {
     private GameService gameService;
     private RoundService roundService;
     private HandService handService;
+    private BidService bidService;
+    private TrickService trickService;
 
-    public GameApiController(GameService gameService, RoundService roundService, HandService handService) {
+    public GameApiController(GameService gameService, RoundService roundService, HandService handService, BidService bidService, TrickService trickService) {
         this.gameService = gameService;
         this.roundService = roundService;
         this.handService = handService;
+        this.bidService = bidService;
+        this.trickService = trickService;
     }
     
 
@@ -104,6 +106,29 @@ public class GameApiController {
     public ResponseEntity<List<Hand>> getHandsByRoundId(@PathVariable int roundId) {
         List<Hand> hands = handService.getHandsByRoundId(roundId);
         return ResponseEntity.ok().body(hands);
+    }
+
+    @GetMapping(path = "bids")
+    public ResponseEntity<List<Bid>> getBids() {
+        List<Bid> bids = bidService.getAllBids();
+        return ResponseEntity.ok().body(bids);
+    }
+
+    @PostMapping(path = "bids")
+    public ResponseEntity<Bid> makeBid(@PathVariable int roundId, @RequestBody Bid bid) {
+        try {
+            Bid addedBid = bidService.addBid(bid);
+            return ResponseEntity.ok().body(addedBid);
+        } catch (ClientErrorException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
+    }
+
+    @GetMapping(path = "tricks/{roundId}")
+    public ResponseEntity<List<Trick>> getTricksByRoundId(@PathVariable int roundId) {
+        List<Trick> tricks = trickService.getTricksByRoundId(roundId);
+        return ResponseEntity.ok().body(tricks);
     }
 
     

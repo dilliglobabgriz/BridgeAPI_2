@@ -17,12 +17,23 @@ public class Bid {
     @Column(name = "direction")
     private int direction; // 0 for North, 1 for East, 2 for South, 3 for West
 
+    /**
+     * 0 for Clubs, 1 for Diamonds, 2 for Hearts, 3 for Spades, 4 for No Trump
+     * Null for pass/double
+     */
     @Column(name = "suit")
-    private int suit; // 0 for Clubs, 1 for Diamonds, 2 for Hearts, 3 for Spades, 4 for No Trump, 5 for pass, 6 for double, 7 for redouble
+    private int suit;
 
+    /**
+     * 1-7 for suit bid, otherwise null
+     */
     @Column(name = "level")
-    private int level; // 1 to 7 for bid levels
+    private int level;
 
+    /**
+     * 0 for pass, 1 for suit bid, 2 for double, 3 for redouble
+     * If pass or double, suit/level can be null
+     */
     @Column(name = "bidType")
     private int bidType;
 
@@ -33,7 +44,8 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(int direction, int suit, int level, int bidType, int bidSequence) {
+    public Bid(int roundId, int direction, int suit, int level, int bidType, int bidSequence) {
+        this.roundId = roundId;
         this.direction = direction;
         this.suit = suit;
         this.level = level;
@@ -42,6 +54,10 @@ public class Bid {
     }
 
     // Getters and Setters
+    public int getRoundId() {
+        return roundId;
+    }
+
     public int getBidId() {
         return bidId;
     }

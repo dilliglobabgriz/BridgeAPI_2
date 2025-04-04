@@ -113,7 +113,7 @@ This will create an Apache Tomcat server on port 8080 where you can do the follo
 
 
 ## ⚙️ **Project Overview**
-Full stack web application using Java's Spring Boot framework. Allows users to play and enjoy the game of Bridge.
+Full stack web application using Java's Spring Boot framework. Made for creating and analyzing games of bridge. Allows users to play and enjoy the game of Bridge.
 
 ---
 
@@ -133,20 +133,19 @@ Currently using:
 3. **Initialize a new round**
     - CREATE a round with with only game id initialized
     - Deal 13 cards per player
-4. **Start the bidding process**
+4. **Save hands to the DB**
+    - Serialize hands and add connect them with playerId in DB
+5. **Start the bidding process**
     - Get bids from each player until a final contract is determined.
     - UPDATE the winning contract and the player who bid it to the hand.
     - Serialize bid history and UPDATE round
-5. **Start the trick-taking process**
+6. **Start the trick-taking process**
     - Get one card from each player, starting with the left of the dealer.
     - Determine who won the trick and update the score.
     - Serialize trick history and UPDATE to round
-6. **Score the round**
+7. **Score the round**
     - Determine the score based on the contract, tricks taken, and vulnerability.
-7. **Save round to the DB**
-8. **Save hands to the DB**
-    - Serialize hands and add connect them with playerId in DB
-9. **Start new round**
+8. **Start new round**
     - Until game is over start a new round
 
 ---

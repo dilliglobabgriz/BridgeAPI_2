@@ -20,10 +20,16 @@ public class Trick {
     @Column(name = "leaderDirection", nullable = false)
     private int leaderDirection;
 
-    @Column(name = "winningDirection", nullable = false)
+    @Column(name = "winningDirection")
     private int winningDirection;
 
     public Trick() {
+    }
+
+    public Trick(int roundId, int trickNumber, int leaderDirection) {
+        this.roundId = roundId;
+        this.trickNumber = trickNumber;
+        this.leaderDirection = leaderDirection;
     }
 
     public Trick(int roundId, int trickNumber, int leaderDirection, int winningDirection) {

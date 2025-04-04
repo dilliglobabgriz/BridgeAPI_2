@@ -67,4 +67,8 @@ public class RoundService {
         return roundRepository.findAllByGameId(gameId).orElse(null);
     }
 
+    public Round getRoundById(int roundId) {
+        return roundRepository.findById(roundId).orElse(null);
+    }
+
 }

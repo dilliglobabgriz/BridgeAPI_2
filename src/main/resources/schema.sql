@@ -75,7 +75,7 @@ CREATE TABLE bid (
     direction       INTEGER NOT NULL, -- Player direction making the bid (0-3)
     suit            INTEGER,          -- e.g., 0=C, 1=D, 2=H, 3=S, 4=NT (NULL for Pass/Double/Redouble)
     level           INTEGER,          -- 1-7 (NULL for Pass/Double/Redouble)
-    bidType         INTEGER NOT NULL, -- e.g., 0=Pass, 1=Bid, 2=Double, 3=Redouble
+    bidType         INTEGER NOT NULL, -- 0=Pass, 1=Bid, 2=Double, 3=Redouble
     bidSequence     INTEGER NOT NULL, -- Order of bids within the round (0, 1, 2...)
 
     FOREIGN KEY(roundId) REFERENCES round(roundId)
@@ -87,7 +87,7 @@ CREATE TABLE trick (
     roundId             INTEGER NOT NULL,
     trickNumber         INTEGER NOT NULL, -- 1-13
     leaderDirection     INTEGER NOT NULL, -- Player direction leading the trick (0-3)
-    winningDirection    INTEGER NOT NULL, -- Player direction winning the trick (0-3)
+    winningDirection    INTEGER,          -- Player direction winning the trick (0-3)
 
     FOREIGN KEY(roundId) REFERENCES round(roundId)
 );
