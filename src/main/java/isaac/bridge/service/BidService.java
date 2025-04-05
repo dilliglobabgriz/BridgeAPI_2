@@ -50,6 +50,8 @@ public class BidService {
      * @return
      */
     public boolean isValidBid(List<Bid> bidHistory, Bid bid) {
+        List<Bid> previousBids = getBidsByRoundId(bid.getRoundId());
+
         return true;
     }
 }
