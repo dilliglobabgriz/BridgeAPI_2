@@ -59,6 +59,10 @@ public class RoundService {
 
     }
 
+    public Round updateRound(Round round) {
+        return roundRepository.save(round);
+    }
+
     public List<Round> getAllRounds() {
         return roundRepository.findAll();
     }

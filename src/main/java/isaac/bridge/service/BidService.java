@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import isaac.bridge.entity.Bid;
+import isaac.bridge.entity.Round;
 import isaac.bridge.exception.ClientErrorException;
 import isaac.bridge.repository.BidRepository;
 
@@ -38,7 +39,12 @@ public class BidService {
             throw new ClientErrorException("Bid is not valid given previous bids.");
         }
 
-        return bidRepository.save(bid);
+        Bid validatedBid = bidRepository.save(bid);
+
+        // If new bid completes bidding update the round with the winning contract info
+        updateRoundWithContract(getBidsByRoundId(bid.getRoundId()));
+
+        return validatedBid;
 
     }
 
@@ -147,5 +153,38 @@ public class BidService {
         return (bid.getBidSequence() - lastBid.getBidSequence() == 1) &&
            ((bid.getDirection() - lastBid.getDirection() + 4) % 4 == 1);  // +4 %4 deals with going from 3 to 0
         
+    }
+
+    /**
+     * If the bid history is not complete this method does nothing
+     * If it is complete, it finds the connected round and updates its winning contract fields
+     * 
+     * @param bidHistory
+     */
+    public void updateRoundWithContract(List<Bid> bidHistory) {
+
+        if (!isBiddingComplete(bidHistory)) return;
+
+        Bid lastSuitBid = getLastBidOfType(1, bidHistory);
+        Bid lastDoubledBid = getLastBidOfType(2, bidHistory);
+        Bid lastRedoubledBid = getLastBidOfType(3, bidHistory);
+
+        Round round = roundService.getRoundById(lastSuitBid.getRoundId());
+
+        // Determine contract modifier status 0 for undoubled, 1 for doubled, 2 for redoubled
+        int contractModifier = 0;
+        if (lastDoubledBid != null && lastDoubledBid.getBidSequence() > lastSuitBid.getBidSequence()) {
+            contractModifier = 1;
+        }
+        if (lastRedoubledBid != null && lastRedoubledBid.getBidSequence() > lastSuitBid.getBidSequence()) {
+            contractModifier = 2;
+        }
+
+        round.setContractLevel(lastSuitBid.getLevel());
+        round.setContractSuit(lastSuitBid.getSuit());
+        round.setContractModifier(contractModifier);
+
+        roundService.updateRound(round);
+
     }
 }

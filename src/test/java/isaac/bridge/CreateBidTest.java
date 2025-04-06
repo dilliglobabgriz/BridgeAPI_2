@@ -165,6 +165,38 @@ public class CreateBidTest {
 
     }
 
+    @Test 
+    public void updateRoundAfterBiddingCompleteTest() {
+        Game game = gameService.createGame();
+        Round round = roundService.createRound(game);
+        Bid validBid1 = new Bid(round.getRoundId(), 0, 1, 1, 1, 1);  // N 1D
+        Bid validBid2 = new Bid(round.getRoundId(), 1, 4, 1, 1, 2);  // E 1NT
+        Bid validBid3 = new Bid(round.getRoundId(), 2, 1, 3, 1, 3);  // S 3D
+        Bid validBid4 = new Bid(round.getRoundId(), 3, 0, 3, 2, 4);  // W X
+        Bid validBid5 = new Bid(round.getRoundId(), 0, 0, 3, 0, 5);  // N P
+        Bid validBid6 = new Bid(round.getRoundId(), 1, 0, 3, 0, 6);  // E P
+        Bid validBid7 = new Bid(round.getRoundId(), 2, 1, 3, 0, 7);  // S P
+
+
+        bidService.addBid(validBid1);
+        bidService.addBid(validBid2);
+        bidService.addBid(validBid3);
+        bidService.addBid(validBid4);
+        bidService.addBid(validBid5);
+        bidService.addBid(validBid6);
+        bidService.addBid(validBid7);
+
+        Round updatedRound = roundService.getRoundById(round.getRoundId());
+        
+        boolean didRoundUpdateProperly = round.getContractLevel() == 0 &&
+                                         round.getContractSuit() == 0 &&
+                                         round.getContractModifier() == 0 &&
+                                         updatedRound.getContractLevel() == 3 &&
+                                         updatedRound.getContractSuit() == 1 &&
+                                         updatedRound.getContractModifier() == 1;
+
+        Assertions.assertTrue(didRoundUpdateProperly, "All contract fields should update appropriately since bidding is done.");
+    }
     // Add more tests for each way a bid can fail!
     
 }
