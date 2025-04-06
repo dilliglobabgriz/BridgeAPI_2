@@ -57,7 +57,7 @@ public class CreateBidTest {
     }
 
     @Test 
-    public void addInvalidBidToRound() {
+    public void addInvalidSameLevelBidToRound() {
         Game game = gameService.createGame();
         Round round = roundService.createRound(game);
         Bid validBid1 = new Bid(round.getRoundId(), 0, 1, 1, 1, 1);  // N 1D
@@ -81,5 +81,90 @@ public class CreateBidTest {
         Assertions.assertEquals("Bid is not valid given previous bids.", exception.getMessage());
 
     }
+
+    @Test 
+    public void addInvalidBidDirectionToRound() {
+        Game game = gameService.createGame();
+        Round round = roundService.createRound(game);
+        Bid validBid1 = new Bid(round.getRoundId(), 0, 1, 1, 1, 1);  // N 1D
+        Bid validBid2 = new Bid(round.getRoundId(), 1, 4, 1, 1, 2);  // E 1NT
+        Bid validBid3 = new Bid(round.getRoundId(), 2, 1, 3, 1, 3);  // S 3D
+        Bid validBid4 = new Bid(round.getRoundId(), 3, 0, 3, 2, 4);  // W X
+        // Bid is valid but the direction is wrong
+        Bid invalidBid = new Bid(round.getRoundId(), 1, 0, 3, 0, 5);  // N P
+    
+
+        bidService.addBid(validBid1);
+        bidService.addBid(validBid2);
+        bidService.addBid(validBid3);
+        bidService.addBid(validBid4);
+
+        Exception exception = Assertions.assertThrows(ClientErrorException.class, () -> {
+            bidService.addBid(invalidBid);
+        });
+
+        Assertions.assertEquals("Bid is not valid given previous bids.", exception.getMessage());
+
+    }
+
+    @Test 
+    public void addBidToCompletedBiddingRound() {
+        Game game = gameService.createGame();
+        Round round = roundService.createRound(game);
+        Bid validBid1 = new Bid(round.getRoundId(), 0, 1, 1, 1, 1);  // N 1D
+        Bid validBid2 = new Bid(round.getRoundId(), 1, 4, 1, 1, 2);  // E 1NT
+        Bid validBid3 = new Bid(round.getRoundId(), 2, 1, 3, 1, 3);  // S 3D
+        Bid validBid4 = new Bid(round.getRoundId(), 3, 0, 3, 2, 4);  // W X
+        Bid validBid5 = new Bid(round.getRoundId(), 0, 0, 3, 0, 5);  // N P
+        Bid validBid6 = new Bid(round.getRoundId(), 1, 0, 3, 0, 6);  // E P
+        Bid validBid7 = new Bid(round.getRoundId(), 2, 0, 3, 0, 7);  // S P
+        // West tries to add bid after three passes
+        Bid invalidBid = new Bid(round.getRoundId(), 3, 0, 5, 1, 8);  // W 5C
+
+        bidService.addBid(validBid1);
+        bidService.addBid(validBid2);
+        bidService.addBid(validBid3);
+        bidService.addBid(validBid4);
+        bidService.addBid(validBid5);
+        bidService.addBid(validBid6);
+        bidService.addBid(validBid7);
+
+        Exception exception = Assertions.assertThrows(ClientErrorException.class, () -> {
+            bidService.addBid(invalidBid);
+        });
+
+        Assertions.assertEquals("Bid is not valid given previous bids.", exception.getMessage());
+
+    }
+
+    @Test 
+    public void addValidRedoubleToRound() {
+        Game game = gameService.createGame();
+        Round round = roundService.createRound(game);
+        Bid validBid1 = new Bid(round.getRoundId(), 0, 1, 1, 1, 1);  // N 1D
+        Bid validBid2 = new Bid(round.getRoundId(), 1, 4, 1, 1, 2);  // E 1NT
+        Bid validBid3 = new Bid(round.getRoundId(), 2, 1, 3, 1, 3);  // S 3D
+        Bid validBid4 = new Bid(round.getRoundId(), 3, 0, 3, 2, 4);  // W X
+        Bid validBid5 = new Bid(round.getRoundId(), 0, 0, 3, 0, 5);  // N P
+        Bid validBid6 = new Bid(round.getRoundId(), 1, 0, 3, 0, 6);  // E P
+        Bid validRedouble = new Bid(round.getRoundId(), 2, 1, 3, 3, 7);  // S XX
+
+
+        bidService.addBid(validBid1);
+        bidService.addBid(validBid2);
+        bidService.addBid(validBid3);
+        bidService.addBid(validBid4);
+        bidService.addBid(validBid5);
+        bidService.addBid(validBid6);
+
+        Bid validatedRedouble = bidService.addBid(validRedouble);
+
+        boolean isValidated = validatedRedouble != null;
+
+        Assertions.assertTrue(isValidated, "Bid should be added with no complications.");
+
+    }
+
+    // Add more tests for each way a bid can fail!
     
 }

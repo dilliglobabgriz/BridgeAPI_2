@@ -56,28 +56,42 @@ public class BidService {
      */
     public boolean isValidBid(List<Bid> bidHistory, Bid bid) {
         bidHistory.sort(Comparator.comparing(Bid::getBidSequence)); // Sort bids in order
-        int size = bidHistory.size();
+
+        Bid lastSuitBid = getLastBidOfType(1, bidHistory);
+        Bid lastDouble = getLastBidOfType(2, bidHistory);
+        Bid lastRedouble = getLastBidOfType(3, bidHistory);
+
     
-        if (isBiddingComplete(bidHistory)) {
-            return false;
-        }
+        if (isBiddingComplete(bidHistory)) return false;
+
+        if (!isSequenceAndDirectionCorrect(bidHistory, bid)) return false;
 
         if (bid.getBidType() == 3) {     // Redouble
-            Bid lastDouble = getLastBidOfType(2, bidHistory);
             if (lastDouble == null) {
                 return false;
             }
 
             // Ensure that there were no suit or redoubles after the double
-            
+            if (lastRedouble != null && lastRedouble.getBidSequence() - bid.getBidSequence() < 4) return false;
+            if (lastSuitBid.getBidSequence() > lastDouble.getBidSequence()) return false;
         }
 
         if (bid.getBidType() == 2) {     // Double
+            if (lastSuitBid == null) return false;
+            boolean isLastBidPartner = (bid.getDirection() + lastSuitBid.getDirection()) % 2 == 0;
+            if (isLastBidPartner) return false;
+
+            // Ensure no doubles/redoubles since suit bid
+            if (lastDouble != null && lastDouble.getBidSequence() > lastSuitBid.getBidSequence()) return false;
+            if (lastRedouble != null && lastRedouble.getBidSequence() > lastSuitBid.getBidSequence()) return false;
 
         }
 
         if (bid.getBidType() == 1) {     // Suit bid
+            if (lastSuitBid == null) return true;
 
+            if (bid.getLevel() < lastSuitBid.getLevel()) return false;
+            if (bid.getLevel() == lastSuitBid.getLevel() && bid.getSuit() <= lastSuitBid.getSuit()) return false;
         }
 
         return true;
@@ -121,5 +135,17 @@ public class BidService {
         }
 
         return null;
+    }
+
+    public boolean isSequenceAndDirectionCorrect(List<Bid> bidHistory, Bid bid) {
+        if (bidHistory.isEmpty()) {
+            return bid.getBidSequence() == 1;
+        }
+
+        Bid lastBid = bidHistory.get(bidHistory.size() - 1);
+
+        return (bid.getBidSequence() - lastBid.getBidSequence() == 1) &&
+           ((bid.getDirection() - lastBid.getDirection() + 4) % 4 == 1);  // +4 %4 deals with going from 3 to 0
+        
     }
 }
