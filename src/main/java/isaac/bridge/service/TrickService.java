@@ -24,6 +24,14 @@ public class TrickService {
         return trickRepository.findAllByRoundId(roundId).orElse(null);
     }
 
+    public Trick getTrickById(int id) {
+        return trickRepository.findById(id).orElse(null);
+    }
+
+    public Trick saveTrick(Trick trick) {
+        return trickRepository.save(trick);
+    }
+
     public Trick createTrick(Round round) {
         // Validate round exists in db and bidding is done
         Round validatedRound = roundService.getRoundById(round.getRoundId());
@@ -37,6 +45,10 @@ public class TrickService {
         List<Trick> previousTricks = getTricksByRoundId(validatedRound.getRoundId());
         int trickNumber = previousTricks.size() + 1;
         int leaderDirection;
+
+        if (trickNumber > 13) {
+            throw new ClientErrorException("All 13 tricks have already been played.");
+        }
 
         if (previousTricks.isEmpty()) {   // One left of the declarer
             leaderDirection = (round.getDeclarerDirection() + 1) % 4;  

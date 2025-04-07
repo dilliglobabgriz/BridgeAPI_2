@@ -87,13 +87,13 @@ public class Card {  // Specifically for cards played into a trick NOT for playe
 
     @Override
     public String toString() {
-        return "Card{" +
-                "cardId=" + cardId +
-                ", trickId=" + trickId +
-                ", playerDirection=" + playerDirection +
-                ", suit=" + suit +
-                ", rank=" + rank +
-                ", playSequence=" + playSequence +
-                '}';
+        String[] suitStrings = {"C", "D", "H", "S"}; // Clubs, Diamonds, Hearts, Spades
+        String[] rankStrings = {"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"};
+    
+        String rankStr = (rank >= 0 && rank < rankStrings.length) ? rankStrings[rank] : "?";
+        String suitStr = (suit >= 0 && suit < suitStrings.length) ? suitStrings[suit] : "?";
+    
+        return rankStr + suitStr;
     }
+
 }

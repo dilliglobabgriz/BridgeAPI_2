@@ -51,6 +51,12 @@ public class HandService {
         return String.join(", ", hand);
     }
 
+    public String[] cardStringToArray(String cards) {
+        return Arrays.stream(cards.split(","))
+                     .map(String::trim)
+                     .toArray(String[]::new);
+    }
+
     public List<Hand> getAllHands() {
         return handRepository.findAll();
     }
@@ -59,4 +65,7 @@ public class HandService {
         return handRepository.findAllByRoundId(roundId).orElse(null);
     }
     
+    public Hand getHandByRoundIdAndPlayerId(int roundId, int playerId) {
+        return handRepository.findByRoundIdAndPlayerId(roundId, playerId).orElse(null);
+    }
 }

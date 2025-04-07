@@ -191,12 +191,14 @@ public class CreateBidTest {
         boolean didRoundUpdateProperly = round.getContractLevel() == 0 &&
                                          round.getContractSuit() == 0 &&
                                          round.getContractModifier() == 0 &&
+                                         round.getDeclarerDirection() == 0 &&
                                          updatedRound.getContractLevel() == 3 &&
                                          updatedRound.getContractSuit() == 1 &&
-                                         updatedRound.getContractModifier() == 1;
+                                         updatedRound.getContractModifier() == 1 &&
+                                         updatedRound.getDeclarerDirection() == 2;
 
         Assertions.assertTrue(didRoundUpdateProperly, "All contract fields should update appropriately since bidding is done.");
     }
-    // Add more tests for each way a bid can fail!
+    
     
 }

@@ -10,4 +10,6 @@ import isaac.bridge.entity.Hand;
 public interface HandRepository extends JpaRepository<Hand, Integer>{
 
     Optional<List<Hand>> findAllByRoundId(int roundId);
+
+    Optional<Hand> findByRoundIdAndPlayerId(int roundId, int playerId);
 }

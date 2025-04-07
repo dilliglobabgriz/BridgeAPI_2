@@ -183,6 +183,7 @@ public class BidService {
         round.setContractLevel(lastSuitBid.getLevel());
         round.setContractSuit(lastSuitBid.getSuit());
         round.setContractModifier(contractModifier);
+        round.setDeclarerDirection(lastSuitBid.getDirection());
 
         roundService.updateRound(round);
 
