@@ -1,3 +1,4 @@
+-- ############################     Completed round     ##################################
 INSERT INTO player (playerId) VALUES (9996);
 INSERT INTO player (playerId) VALUES (9997);
 INSERT INTO player (playerId) VALUES (9998);
@@ -231,3 +232,13 @@ WHERE trickId = 4452;
 UPDATE round
 SET northSouthTricksTaken = 8, eastWestTricksTaken = 5
 WHERE roundId = 7777;
+
+-- ############################### Uncompleted Round ####################################
+INSERT INTO player (playerId) VALUES (10996);
+INSERT INTO player (playerId) VALUES (10997);
+INSERT INTO player (playerId) VALUES (10998);
+INSERT INTO player (playerId) VALUES (10999);
+
+INSERT INTO game (gameId, northId, eastId, southId, westId) VALUES (8889, 10996, 10997, 10998, 10999);
+
+INSERT INTO round (roundId, gameId roundNumber, dealerDirection) VALUES (7778, 8889, 1, 1);
