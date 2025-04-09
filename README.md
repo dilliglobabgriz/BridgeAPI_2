@@ -157,5 +157,6 @@ Currently using:
 ---
 
 ## 📏 **Dev Log**
-
+- Data.sql in resources is not being ran at start up... not sure why
+- Schema works and running the data script in my h2Console produces a valid game to play around with
 

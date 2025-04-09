@@ -111,3 +111,4 @@ CREATE INDEX idxHandPlayerId ON hand(playerId);
 CREATE INDEX idxBidRoundId ON bid(roundId);
 CREATE INDEX idxTrickRoundId ON trick(roundId);
 CREATE INDEX idxCardTrickId ON card(trickId);
+
