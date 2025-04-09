@@ -241,4 +241,4 @@ INSERT INTO player (playerId) VALUES (10999);
 
 INSERT INTO game (gameId, northId, eastId, southId, westId) VALUES (8889, 10996, 10997, 10998, 10999);
 
-INSERT INTO round (roundId, gameId roundNumber, dealerDirection) VALUES (7778, 8889, 1, 1);
+INSERT INTO round (roundId, gameId, roundNumber, dealerDirection) VALUES (11111, 8889, 1, 0);
