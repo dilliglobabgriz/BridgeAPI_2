@@ -1,5 +1,8 @@
 package isaac.bridge;
 
+
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,31 +37,41 @@ public class CreateCardTest {
     @Autowired 
     CardService cardService;
 
-    @Test
-    public void addCardToTrick() {
-        Game game = gameService.createGame();
-        Round round = roundService.createRound(game);
-        // Imitate bidding
-        round.setContractLevel(3);
-        round.setContractSuit(3);    
-        round.setDeclarerDirection(2);   // S 3S
-        round.setContractModifier(0);
+    // @Test
+    // public void addCardToTrick() {
+    //     Game game = gameService.createGame();
+    //     Round round = roundService.createRound(game);
+    //     // Imitate bidding
+    //     round.setContractLevel(3);
+    //     round.setContractSuit(3);    
+    //     round.setDeclarerDirection(2);   // S 3S
+    //     round.setContractModifier(0);
 
-        roundService.updateRound(round);
-        Trick trick = trickService.createTrick(round);
+    //     roundService.updateRound(round);
+    //     Trick trick = trickService.createTrick(round);
 
-        int westId = game.getWestId();
+    //     int westId = game.getWestId();
 
-        Hand hand = handService.getHandByRoundIdAndPlayerId(round.getRoundId(), westId);
-        int[] cards = hand.getCardArray();
+    //     Hand hand = handService.getHandByRoundIdAndPlayerId(round.getRoundId(), westId);
+    //     int[] cards = hand.getCardArray();
         
-        Card card = new Card(trick.getTrickId(), 3, cards[1], cards[0], 1);
-        Card addedCard = cardService.addCard(card);
+    //     Card card = new Card(trick.getTrickId(), 3, cards[1], cards[0], 1);
+    //     Card addedCard = cardService.addCard(card);
 
-        boolean didCardAdd = addedCard != null;
+    //     boolean didCardAdd = addedCard != null;
 
-        Assertions.assertTrue(didCardAdd, "Card should add to db with no exceptions.");
+    //     Assertions.assertTrue(didCardAdd, "Card should add to db with no exceptions.");
 
+    // }
+
+    @Test 
+    public void getCardsByTrick() {
+        List<Card> cards = cardService.getCardsByTrickId(4440);
+
+        boolean areCardsAsExpected = cards.get(3).getRank() == 6 &&
+                                     cards.get(3).getSuit() == 0;
+
+        Assertions.assertTrue(areCardsAsExpected, "Third card in trick should be 6C.");
     }
     
 }

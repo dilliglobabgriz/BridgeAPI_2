@@ -65,6 +65,14 @@ public class Round {
         deck = fillDeck();
     }
 
+    public Round(int roundId, int gameId, int dealerDirection, int roundNumber) {
+        this.roundId = roundId;
+        this.gameId = gameId;
+        this.dealerDirection = dealerDirection; 
+        this.roundNumber = roundNumber;
+        deck = fillDeck();
+    }
+
     // Getters and Setters
     public int getRoundId() {
         return roundId;
